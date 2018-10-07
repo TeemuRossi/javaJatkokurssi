@@ -22,7 +22,30 @@ public class JuomaAutomaatti {
 	
 	
 	// luodaan getterit ja setterit
-	
+
+	public int getTeetä() {
+		return teetä;
+	}
+
+	public void setTeetä(int teetä) {
+		this.teetä = teetä;
+	}
+
+	public int getKahvia() {
+		return kahvia;
+	}
+
+	public void setKahvia(int kahvia) {
+		this.kahvia = kahvia;
+	}
+
+	public int getKaakaota() {
+		return kaakaota;
+	}
+
+	public void setKaakaota(int kaakaota) {
+		this.kaakaota = kaakaota;
+	}
 
 	// jokaisessa alla olevassa methodissa tarkistetaan juoman määrä ja että
 	// voidaanko tätä valmistaa, if-lauseen avulla
@@ -38,6 +61,7 @@ public class JuomaAutomaatti {
 			System.out.println("Kahvia ei ole enää jäljellä! Täytä säiliö");
 		}
 	}
+
 
 	// valmistetaan vähän teetä
 	public void valmistaTee() {
