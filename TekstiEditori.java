@@ -1,4 +1,4 @@
-package olioOhjelmointi;
+package koulu1;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -21,6 +21,7 @@ import javax.swing.KeyStroke;
 import java.awt.event.KeyEvent;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.PrintWriter;
 import java.util.Scanner;
 import java.awt.event.InputEvent;
 
@@ -34,7 +35,6 @@ public class TekstiEditori {
 
 	public static void main(String[] args) {
 		JEditorPane editorPane = new JEditorPane();
-		
 
 		JFrame ikkuna = new JFrame();
 		ikkuna.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -48,25 +48,38 @@ public class TekstiEditori {
 
 		mb11 = new JMenuItem("Avaa");
 		mb11.addActionListener(new ActionListener() {
-			@SuppressWarnings("resource")
+			
 			public void actionPerformed(ActionEvent e) {
+
+				// ikkuna
+
 				JFileChooser valinta = new JFileChooser();
+				valinta.setApproveButtonText("Avaa tiedosto");
+				valinta.setDialogTitle("Tiedoston valinta");
 				valinta.showOpenDialog(null);
+
 				String rivi = "";
 				String uusiTiedosto = valinta.getSelectedFile().getAbsolutePath();
-				
+
+				Scanner lukija = null;
+				File tiedosto = new File(uusiTiedosto);
+				// avaaminen
 				try {
-					Scanner lukija = null;
-					
-					File tiedosto = new File(uusiTiedosto);
-					
+
 					lukija = new Scanner(tiedosto);
-				
+
 				} catch (FileNotFoundException p) {
-					System.out.println("Tiedostoa ei lÃ¶ytynyt");
+					System.out.println("Tiedostoa ei löytynyt");
 				}
+
+				while (lukija.hasNextLine()) {
+					rivi += lukija.nextLine() + "\n";
+					System.out.println(rivi);
+
+				}
+
 				editorPane.setText(rivi);
-				
+
 			}
 		});
 		mb11.setIcon(
@@ -75,12 +88,44 @@ public class TekstiEditori {
 		mb1.add(mb11);
 
 		JMenuItem mb12 = new JMenuItem("Tallenna");
+		mb12.addActionListener(new ActionListener() {
+
+			public void actionPerformed(ActionEvent arg0) {
+
+				// ikkuna
+				
+				JFileChooser valinta = new JFileChooser();
+				valinta.showSaveDialog(null);
+				String uusiTiedosto = valinta.getSelectedFile().getAbsolutePath();
+				System.out.println("Kirjoitettava tiedosto: " + uusiTiedosto);
+
+				// tallennus
+				try {
+					PrintWriter writer = new PrintWriter(uusiTiedosto);
+					String sisalto = editorPane.getText();
+					writer.println(sisalto);
+
+					writer.flush();
+					writer.close();
+				} catch (Exception e1) {
+					System.out.println("Tiedosto tallennuksessa tapahtui virhe!");
+					e1.printStackTrace();
+				}
+			}
+		});
 		mb12.setIcon(new ImageIcon(TekstiEditori.class.getResource("/javax/swing/plaf/metal/icons/ocean/floppy.gif")));
 		mb12.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, InputEvent.CTRL_MASK));
 		mb1.add(mb12);
 
 		JMenuItem mb13 = new JMenuItem("Lopeta");
 		mb13.setIcon(new ImageIcon(TekstiEditori.class.getResource("/javax/swing/plaf/metal/icons/ocean/close.gif")));
+		
+		
+		mb13.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				System.exit(0);
+			}
+		});
 		mb1.add(mb13);
 
 		JMenuItem mb14 = new JMenuItem("Sulje");
@@ -92,9 +137,34 @@ public class TekstiEditori {
 		mb.add(mb2);
 
 		JMenuItem mb21 = new JMenuItem("Etsi");
+		mb21.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+
+				String sisalto = editorPane.getText();
+				sisalto = sisalto.toLowerCase();
+				String haettava = "auto";
+				int indeksi = sisalto.indexOf(haettava);
+				System.out.println("Indeksi: " + indeksi);
+
+				editorPane.setSelectionColor(Color.RED);
+
+				editorPane.setSelectionStart(indeksi);
+				editorPane.setSelectionEnd(indeksi + haettava.length());
+
+			}
+		});
 		mb2.add(mb21);
 
 		JMenuItem mb22 = new JMenuItem("Korvaa");
+		mb22.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				String sisalto = editorPane.getText();
+				sisalto = sisalto.toLowerCase();
+				String haettava = "auto";
+				haettava.replaceAll("xxx", "auto");
+
+			}
+		});
 		mb2.add(mb22);
 
 		JMenu mb3 = new JMenu("Tietoja");
@@ -121,7 +191,6 @@ public class TekstiEditori {
 				TekstiEditori.class.getResource("/com/sun/javafx/scene/control/skin/modena/HTMLEditor-Cut-Black.png")));
 		toolBar.add(btnLeikkaa);
 
-		
 		ikkuna.getContentPane().add(editorPane, BorderLayout.CENTER);
 
 		ikkuna.setVisible(true);
@@ -129,6 +198,7 @@ public class TekstiEditori {
 		ikkuna.setVisible(true);
 
 	}
+
 	public JMenuItem getMb11() {
 		return mb11;
 	}
