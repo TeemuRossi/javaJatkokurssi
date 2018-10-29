@@ -1,4 +1,4 @@
-package koulu1;
+package olioOhjelmointi;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -48,7 +48,7 @@ public class TekstiEditori {
 
 		mb11 = new JMenuItem("Avaa");
 		mb11.addActionListener(new ActionListener() {
-			
+
 			public void actionPerformed(ActionEvent e) {
 
 				// ikkuna
@@ -65,17 +65,15 @@ public class TekstiEditori {
 				File tiedosto = new File(uusiTiedosto);
 				// avaaminen
 				try {
-
 					lukija = new Scanner(tiedosto);
 
 				} catch (FileNotFoundException p) {
-					System.out.println("Tiedostoa ei löytynyt");
+					p.printStackTrace();
 				}
 
 				while (lukija.hasNextLine()) {
-					rivi += lukija.nextLine() + "\n";
-					System.out.println(rivi);
-
+					rivi += lukija.nextLine();
+					rivi += "\n";
 				}
 
 				editorPane.setText(rivi);
@@ -93,7 +91,7 @@ public class TekstiEditori {
 			public void actionPerformed(ActionEvent arg0) {
 
 				// ikkuna
-				
+
 				JFileChooser valinta = new JFileChooser();
 				valinta.showSaveDialog(null);
 				String uusiTiedosto = valinta.getSelectedFile().getAbsolutePath();
@@ -119,8 +117,7 @@ public class TekstiEditori {
 
 		JMenuItem mb13 = new JMenuItem("Lopeta");
 		mb13.setIcon(new ImageIcon(TekstiEditori.class.getResource("/javax/swing/plaf/metal/icons/ocean/close.gif")));
-		
-		
+
 		mb13.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				System.exit(0);
@@ -139,10 +136,14 @@ public class TekstiEditori {
 		JMenuItem mb21 = new JMenuItem("Etsi");
 		mb21.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-
+				JFrame ikkuna = new JFrame("Etsi");
+				ikkuna.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+				ikkuna.setSize(350,200);
+				ikkuna.setVisible(true);
+				
 				String sisalto = editorPane.getText();
 				sisalto = sisalto.toLowerCase();
-				String haettava = "auto";
+				String haettava = "senpai";
 				int indeksi = sisalto.indexOf(haettava);
 				System.out.println("Indeksi: " + indeksi);
 
