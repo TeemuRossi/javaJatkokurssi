@@ -11,45 +11,57 @@ public class sanakirja {
 		String[] suomi = { "kissa", "koira", "hevonen", "auto", "vene" };
 		String[] englanti = { "cat", "doggo", "horse", "car", "boat" };
 		HashMap<String, String> sanat = new HashMap<>();
-		System.out.println("Paina 1 jos haluat nähdä sanoja ja näiden käännökset.\nPaina 2 jos haluat lisätä sanan.");
-
+		System.out.print("Ohessa sanakirjasta löytyvät sanat: ");
 		for (int i = 0; i < suomi.length; i++) {
 			sanat.put(suomi[i], englanti[i]);
+			System.out.print("\"" + suomi[i] + "\" ");
 		}
-		System.out.println(sanat);
-
 		while (true) {
-			System.out.println("Sana alkukielellä? (tyhjä lopettaa)");
-			String suomiSana = lukija.nextLine();
-			if (!suomiSana.isEmpty()) {
-				System.out.println("Sana käännettynä?(tyhjä lopettaa)");
-				String englanninSana = lukija.nextLine();
-				if (!englanninSana.isEmpty()) {
-					sanat.put(suomiSana, englanninSana);
-					continue;
-				} else {
-					break;
+		System.out.println(
+				"\nPaina 1 jos etsiä sanojen käännökset.\nPaina 2 jos haluat lisätä sanan.\nPaina 3 sulkeaksesi ohjelman.");
+		int valinta = lukija.nextInt();
+		
+			if (valinta == 1) {
+				lukija.nextLine();
+				while (true) {
+					System.out.println("Minkä sanan käännöksen haluat tietää? (tyhjä sana lopettaa)");
 
+					String sana = lukija.nextLine();
+					if (sanat.containsKey(sana)) {
+						System.out.println("Sanan \"" + sana + "\" käännös on " + sanat.get(sana) + "\n");
+					} else if (!sanat.containsKey(sana) && !sana.isEmpty()) {
+						System.out.println("Sanan \"" + sana + "\" käännös on tuntematon!\n");
+					} else {
+						break;
+					}
 				}
 
-			} else {
-				System.out.println(sanat);
-				break;
-			}
-		}
-		while (true) {
-			System.out.println("Minkä sanan käännöksen haluat tietää? (tyhjä sana lopettaa)");
+			} else if (valinta == 2) {
+				lukija.nextLine();
+				while (true) {
+					System.out.println("Sana alkukielellä? (tyhjä lopettaa)");
+					String suomiSana = lukija.nextLine();
+					if (!suomiSana.isEmpty()) {
+						System.out.println("Sana käännettynä? (tyhjä lopettaa)");
+						String englanninSana = lukija.nextLine();
+						if (!englanninSana.isEmpty()) {
+							sanat.put(suomiSana, englanninSana);
+						} else {
+							break;
 
-			String sana = lukija.nextLine();
-			if (sanat.containsKey(sana)) {
-				System.out.println("Sanan \"" + sana + "\" käännös on " + sanat.get(sana) + "\n");
-			} else if (!sanat.containsKey(sana) && !sana.isEmpty()) {
-				System.out.println("Sanan \"" + sana + "\" käännös on tuntematon!\n");
-			} else {
-				System.out.println("Ohjelma lopetetaan, kiitos käytöstä!");
+						}
+
+					} else {
+						System.out.println(sanat);
+						break;
+					}
+				}
+			}
+			else if (valinta == 3) {
+				System.out.println("Kiitos ja näkemiin!");
 				System.exit(0);
+				
 			}
 		}
-
 	}
 }
