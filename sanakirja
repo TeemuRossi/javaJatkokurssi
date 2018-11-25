@@ -1,49 +1,78 @@
 package olioOhjelmointi;
 
 import java.beans.XMLDecoder;
-import java.io.BufferedInputStream;
+import java.beans.XMLEncoder;
+import java.io.EOFException;
+import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Scanner;
 
 public class sanakirja {
-public static void DeseralizeFromXML(HashMap<String, String> filename) {
-	XMLDecoder decoder = null;
-	try {
-		decoder = new XMLDecoder(new BufferedInputStream(new FileInputStream(filename)))
-		} catch(FileNotFoundException e) {
-			System.out.println("Error: File not found");
-		}
-	
-}
-	public static void main(String[] args){
+
+	public static void toXML(HashMap<String, String> sanat) throws IOException {
+		FileOutputStream fos = new FileOutputStream("sanakirja.xml");
+		XMLEncoder encoder = new XMLEncoder(fos);
+		encoder.writeObject(sanat);
+		encoder.close();
+		fos.close();
+	}
+
+	public static HashMap<String, String> fromXML() throws IOException {
+		FileInputStream fis = new FileInputStream("sanakirja.xml");
+		XMLDecoder decoder = new XMLDecoder(fis);
+		HashMap<String, String> decoded = (HashMap) decoder.readObject();
+		decoder.close();
+		fis.close();
+		return decoded;
+	}
+
+	public static void main(String[] args) throws IOException {
 		Scanner lukija = new Scanner(System.in);
-		
+
 		String[] suomi = { "kissa", "koira", "hevonen", "auto", "vene" };
 		String[] englanti = { "cat", "doggo", "horse", "car", "boat" };
-		HashMap<String, String> sanat= new HashMap<>();
-		
-		System.out.print("Ohessa sanakirjasta l√∂ytyv√§t sanat: ");
-		for (int i = 0; i < suomi.length; i++) {
-			sanat.put(suomi[i], englanti[i]);
-			System.out.print("\"" + suomi[i] + "\" ");
+
+		HashMap<String, String> sanat;
+		File sanakirja = new File("sanakirja.xml");
+
+		System.out.print("Ohessa sanakirjasta lˆytyv‰t sanat: ");
+
+		// tarkastetaan jos sanakirja.xml tiedosto on jo olemassa, muuten luodaan t‰m‰.
+		// kuitenkin tarkistamisen j‰lkeen tulostetaan uusi tai olemassa oleva sanakirja
+		// n‰kyviin.
+
+		if (sanakirja.createNewFile()) {
+			sanat = new HashMap<String, String>();
+
+			for (int i = 0; i < suomi.length; i++) {
+
+				sanat.put(suomi[i], englanti[i]);
+				System.out.print("\"" + suomi[i] + "\" ");
+			}
+
+		} else {
+			sanat = fromXML();
+			System.out.println(sanat);
 		}
+
 		while (true) {
-		System.out.println(
-				"\nPaina 1 jos etsi√§ sanojen k√§√§nn√∂kset.\nPaina 2 jos haluat lis√§t√§ sanan.\nPaina 3 sulkeaksesi ohjelman.");
-		int valinta = lukija.nextInt();
-		
+			System.out.println(
+					"\nPaina 1 jos etsi‰ sanojen k‰‰nnˆkset.\nPaina 2 jos haluat lis‰t‰ sanan.\nPaina 3 sulkeaksesi ohjelman.");
+			int valinta = lukija.nextInt();
+
 			if (valinta == 1) {
 				lukija.nextLine();
 				while (true) {
-					System.out.println("Mink√§ sanan k√§√§nn√∂ksen haluat tiet√§√§? (tyhj√§ sana lopettaa)");
+					System.out.println("Mink‰ sanan k‰‰nnˆksen haluat tiet‰‰? (tyhj‰ sana lopettaa)");
 
 					String sana = lukija.nextLine();
 					if (sanat.containsKey(sana)) {
-						System.out.println("Sanan \"" + sana + "\" k√§√§nn√∂s on " + sanat.get(sana) + "\n");
+						System.out.println("Sanan \"" + sana + "\" k‰‰nnˆs on " + sanat.get(sana) + "\n");
 					} else if (!sanat.containsKey(sana) && !sana.isEmpty()) {
-						System.out.println("Sanan \"" + sana + "\" k√§√§nn√∂s on tuntematon!\n");
+						System.out.println("Sanan \"" + sana + "\" k‰‰nnˆs on tuntematon!\n");
 					} else {
 						break;
 					}
@@ -52,10 +81,10 @@ public static void DeseralizeFromXML(HashMap<String, String> filename) {
 			} else if (valinta == 2) {
 				lukija.nextLine();
 				while (true) {
-					System.out.println("Sana alkukielell√§? (tyhj√§ lopettaa)");
+					System.out.println("Sana alkukielell‰? (tyhj‰ lopettaa)");
 					String suomiSana = lukija.nextLine();
 					if (!suomiSana.isEmpty()) {
-						System.out.println("Sana k√§√§nnettyn√§? (tyhj√§ lopettaa)");
+						System.out.println("Sana k‰‰nnettyn‰? (tyhj‰ lopettaa)");
 						String englanninSana = lukija.nextLine();
 						if (!englanninSana.isEmpty()) {
 							sanat.put(suomiSana, englanninSana);
@@ -69,13 +98,11 @@ public static void DeseralizeFromXML(HashMap<String, String> filename) {
 						break;
 					}
 				}
-			}
-			else if (valinta == 3) {
-				enc.writeObject(sanat);
-				enc.close();
-				System.out.println("Kiitos ja n√§kemiin!");
+			} else if (valinta == 3) {
+				toXML(sanat);
+				System.out.println("Kiitos ja n‰kemiin!");
 				System.exit(0);
-				
+
 			}
 		}
 	}
