@@ -1,16 +1,29 @@
 package olioOhjelmointi;
 
+import java.beans.XMLDecoder;
+import java.io.BufferedInputStream;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.util.HashMap;
 import java.util.Scanner;
 
 public class sanakirja {
-
-	public static void main(String[] args) {
+public static void DeseralizeFromXML(HashMap<String, String> filename) {
+	XMLDecoder decoder = null;
+	try {
+		decoder = new XMLDecoder(new BufferedInputStream(new FileInputStream(filename)))
+		} catch(FileNotFoundException e) {
+			System.out.println("Error: File not found");
+		}
+	
+}
+	public static void main(String[] args){
 		Scanner lukija = new Scanner(System.in);
-
+		
 		String[] suomi = { "kissa", "koira", "hevonen", "auto", "vene" };
 		String[] englanti = { "cat", "doggo", "horse", "car", "boat" };
-		HashMap<String, String> sanat = new HashMap<>();
+		HashMap<String, String> sanat= new HashMap<>();
+		
 		System.out.print("Ohessa sanakirjasta löytyvät sanat: ");
 		for (int i = 0; i < suomi.length; i++) {
 			sanat.put(suomi[i], englanti[i]);
@@ -58,6 +71,8 @@ public class sanakirja {
 				}
 			}
 			else if (valinta == 3) {
+				enc.writeObject(sanat);
+				enc.close();
 				System.out.println("Kiitos ja näkemiin!");
 				System.exit(0);
 				
