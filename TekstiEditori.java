@@ -1,5 +1,4 @@
 package olioOhjelmointi;
-
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -41,7 +40,7 @@ public class TekstiEditori {
 		JMenuBar mb = new JMenuBar();
 		ikkuna.setJMenuBar(mb);
 
-		// luodaan ensimm√§inen valinta "Tiedosto" jonka alle sitten sen muut osat
+		// luodaan ensimm‰inen valinta "Tiedosto" jonka alle sitten sen muut osat
 		// (avaaminen/tallennus/sulkeminen)
 
 		JMenu mb1 = new JMenu("Tiedosto");
@@ -172,7 +171,7 @@ public class TekstiEditori {
 				ikkuna.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 				ikkuna.setSize(600, 100);
 
-				JLabel lblKorvattava = new JLabel("Mik√§ korvataan");
+				JLabel lblKorvattava = new JLabel("Mik‰ korvataan");
 
 				ikkuna.getContentPane().add(lblKorvattava);
 
@@ -181,7 +180,7 @@ public class TekstiEditori {
 				textField.setSize(new Dimension(100, 30));
 				ikkuna.getContentPane().add(textField);
 
-				JLabel lblNewLabel = new JLabel("Mill√§ korvataan");
+				JLabel lblNewLabel = new JLabel("Mill‰ korvataan");
 
 				ikkuna.getContentPane().add(lblNewLabel);
 
@@ -223,23 +222,23 @@ public class TekstiEditori {
 				ikkuna.setTitle("Tietoja Ohjelmasta");
 				ikkuna.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 				ikkuna.getContentPane().setLayout(new GridLayout(0, 1, 0, 0));
-
+				
 				JPanel panel = new JPanel();
 				ikkuna.getContentPane().add(panel);
 
-				JLabel tekija = new JLabel("Tekij√§: Teemu Rossi");
+				JLabel tekija = new JLabel("Tekij‰: Teemu Rossi");
 				panel.add(tekija);
 
 				JPanel panel_1 = new JPanel();
 				ikkuna.getContentPane().add(panel_1);
 
-				JLabel github = new JLabel("Github:");
+				JLabel github = new JLabel("Github: https://github.com/TeemuRossi");
 				panel_1.add(github);
 
 				JPanel panel_2 = new JPanel();
 				ikkuna.getContentPane().add(panel_2);
 
-				JLabel Kurssi = new JLabel("Java jatkokurssi");
+				JLabel Kurssi = new JLabel("Java olio-ohjelmointi- kurssi");
 				panel_2.add(Kurssi);
 
 				JPanel panel_3 = new JPanel();
@@ -332,7 +331,7 @@ public class TekstiEditori {
 				ikkuna.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 				ikkuna.setSize(600, 100);
 
-				JLabel lblKorvattava = new JLabel("Mik√§ korvataan");
+				JLabel lblKorvattava = new JLabel("Mik‰ korvataan");
 
 				ikkuna.getContentPane().add(lblKorvattava);
 
@@ -341,7 +340,7 @@ public class TekstiEditori {
 				textField.setSize(new Dimension(100, 30));
 				ikkuna.getContentPane().add(textField);
 
-				JLabel lblNewLabel = new JLabel("Mill√§ korvataan");
+				JLabel lblNewLabel = new JLabel("Mill‰ korvataan");
 
 				ikkuna.getContentPane().add(lblNewLabel);
 
