@@ -38,11 +38,11 @@ public class sanakirja {
 		HashMap<String, String> sanat;
 		File sanakirja = new File("sanakirja.xml");
 
-		System.out.print("Ohessa sanakirjasta löytyvät sanat: ");
+		System.out.print("Ohessa sanakirjasta lÃ¶ytyvÃ¤t sanat: ");
 
-		// tarkastetaan jos sanakirja.xml tiedosto on jo olemassa, muuten luodaan tämä.
-		// kuitenkin tarkistamisen jälkeen tulostetaan uusi tai olemassa oleva sanakirja
-		// näkyviin.
+		// tarkastetaan jos sanakirja.xml tiedosto on jo olemassa, muuten luodaan tÃ¤mÃ¤.
+		// kuitenkin tarkistamisen jÃ¤lkeen tulostetaan uusi tai olemassa oleva sanakirja
+		// nÃ¤kyviin.
 
 		if (sanakirja.createNewFile()) {
 			sanat = new HashMap<String, String>();
@@ -60,19 +60,19 @@ public class sanakirja {
 
 		while (true) {
 			System.out.println(
-					"\nPaina 1 jos etsiä sanojen käännökset.\nPaina 2 jos haluat lisätä sanan.\nPaina 3 sulkeaksesi ohjelman.");
+					"\nPaina 1 jos haluat etsiÃ¤ sanojen kÃ¤Ã¤nnÃ¶kset.\nPaina 2 jos haluat lisÃ¤tÃ¤ sanan.\nPaina 3 sulkeaksesi ohjelman.");
 			int valinta = lukija.nextInt();
 
 			if (valinta == 1) {
 				lukija.nextLine();
 				while (true) {
-					System.out.println("Minkä sanan käännöksen haluat tietää? (tyhjä sana lopettaa)");
+					System.out.println("MinkÃ¤ sanan kÃ¤Ã¤nnÃ¶ksen haluat tietÃ¤Ã¤? (tyhjÃ¤ sana lopettaa)");
 
 					String sana = lukija.nextLine();
 					if (sanat.containsKey(sana)) {
-						System.out.println("Sanan \"" + sana + "\" käännös on " + sanat.get(sana) + "\n");
+						System.out.println("Sanan \"" + sana + "\" kÃ¤Ã¤nnÃ¶s on " + sanat.get(sana) + "\n");
 					} else if (!sanat.containsKey(sana) && !sana.isEmpty()) {
-						System.out.println("Sanan \"" + sana + "\" käännös on tuntematon!\n");
+						System.out.println("Sanan \"" + sana + "\" kÃ¤Ã¤nnÃ¶s on tuntematon!\n");
 					} else {
 						break;
 					}
@@ -81,10 +81,10 @@ public class sanakirja {
 			} else if (valinta == 2) {
 				lukija.nextLine();
 				while (true) {
-					System.out.println("Sana alkukielellä? (tyhjä lopettaa)");
+					System.out.println("Sana alkukielellÃ¤? (tyhjÃ¤ lopettaa)");
 					String suomiSana = lukija.nextLine();
 					if (!suomiSana.isEmpty()) {
-						System.out.println("Sana käännettynä? (tyhjä lopettaa)");
+						System.out.println("Sana kÃ¤Ã¤nnettynÃ¤? (tyhjÃ¤ lopettaa)");
 						String englanninSana = lukija.nextLine();
 						if (!englanninSana.isEmpty()) {
 							sanat.put(suomiSana, englanninSana);
@@ -100,7 +100,7 @@ public class sanakirja {
 				}
 			} else if (valinta == 3) {
 				toXML(sanat);
-				System.out.println("Kiitos ja näkemiin!");
+				System.out.println("Kiitos ja nÃ¤kemiin!");
 				System.exit(0);
 
 			}
