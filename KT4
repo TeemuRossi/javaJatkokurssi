@@ -1,0 +1,305 @@
+package kt4;
+
+import java.awt.BorderLayout;
+import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.ArrayList;
+
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JMenuBar;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
+import javax.swing.JTextField;
+import javax.swing.table.DefaultTableModel;
+
+public class tietoKirjasto {
+
+	private static JTextField kirjanNimi;
+	private static JTextField kirjanTekija;
+	private static JTextField julkaisuVuosi;
+	
+	public static void main(String[] args) throws SQLException {
+
+		ArrayList<Object[]> data = new ArrayList<Object[]>();
+		JScrollPane scrollPane = new JScrollPane();
+
+		DefaultTableModel model = new DefaultTableModel();
+		model.addColumn("Kirjan nimi");
+		model.addColumn("Tekijä");
+		model.addColumn("Julkaisuvuosi");
+
+		JTable table = new JTable(model);
+		JFrame ikkuna = new JFrame();
+		ikkuna.setTitle("Kirjasto");
+
+		ikkuna.getContentPane().add(scrollPane);
+		scrollPane.setViewportView(table);
+
+		JMenuBar menuBar = new JMenuBar();
+		ikkuna.getContentPane().add(menuBar, BorderLayout.SOUTH);
+
+		JButton btnLisaa = new JButton("Lisää Kirja");
+		btnLisaa.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				JFrame ikkuna = new JFrame();
+				ikkuna.setSize(250, 250);
+				ikkuna.setTitle("Lisää Kirja");
+				ikkuna.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+				ikkuna.getContentPane().setLayout(new GridLayout(0, 1, 0, 0));
+
+				JPanel panel = new JPanel();
+				ikkuna.getContentPane().add(panel);
+
+				JLabel kirjaNimi = new JLabel("Kirjan Nimi:");
+				panel.add(kirjaNimi);
+
+				kirjanNimi = new JTextField();
+				panel.add(kirjanNimi);
+				kirjanNimi.setColumns(10);
+
+				JPanel panel_1 = new JPanel();
+				ikkuna.getContentPane().add(panel_1);
+
+				JLabel tekija = new JLabel("Kirjan Tekijä:");
+				panel_1.add(tekija);
+
+				kirjanTekija = new JTextField();
+				panel_1.add(kirjanTekija);
+				kirjanTekija.setColumns(10);
+
+				JPanel panel_2 = new JPanel();
+				ikkuna.getContentPane().add(panel_2);
+
+				JLabel julkaistu = new JLabel("Julkaisuvuosi:");
+				panel_2.add(julkaistu);
+
+				julkaisuVuosi = new JTextField();
+				panel_2.add(julkaisuVuosi);
+				julkaisuVuosi.setColumns(10);
+
+				JPanel panel_3 = new JPanel();
+				ikkuna.getContentPane().add(panel_3);
+
+				JButton btnLisKirja = new JButton("Lisää Kirja!");
+				btnLisKirja.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent e) {
+
+						// varaudutaan if lauseissa mahdollisiin ongelmiin
+						// (eli tyhjäksi kentän jättämiseen)
+
+						if (kirjanNimi.getText().equals(null) || (kirjanNimi.getText().equals(""))
+								|| (kirjanNimi.getText().equals(" "))) {
+							JFrame tarkistus = new JFrame();
+							tarkistus.setSize(200, 100);
+							tarkistus.setTitle("Varoitus");
+							tarkistus.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+							JLabel varoitus = new JLabel("Lisää kirjan nimi!");
+							tarkistus.getContentPane().add(varoitus);
+							tarkistus.setVisible(true);
+						} else if (kirjanTekija.getText().equals(null) || (kirjanTekija.getText().equals(""))
+								|| (kirjanTekija.getText().equals(" "))) {
+							JFrame tarkistus = new JFrame();
+							tarkistus.setSize(200, 100);
+							tarkistus.setTitle("Varoitus");
+							tarkistus.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+							JLabel varoitus = new JLabel("Lisää kirjan kirjoittaja!");
+							tarkistus.getContentPane().add(varoitus);
+							tarkistus.setVisible(true);
+						} else if (julkaisuVuosi.getText().equals(null) || (julkaisuVuosi.getText().equals(""))
+								|| (julkaisuVuosi.getText().equals(" "))) {
+							JFrame tarkistus = new JFrame();
+							tarkistus.setSize(200, 100);
+							tarkistus.setTitle("Varoitus");
+							tarkistus.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+							JLabel varoitus = new JLabel("Lisää kirjan julkaisuvuosi!");
+							tarkistus.getContentPane().add(varoitus);
+							tarkistus.setVisible(true);
+						} else {
+							// kerätään annetut tiedot muistiin
+							String nimi = kirjanNimi.getText();
+							String tekija = kirjanTekija.getText();
+							String julkaisuvuosi = julkaisuVuosi.getText();
+							// luodaan yhteys
+							try {
+								Connection con = DriverManager.getConnection(
+										"jdbc:mysql://sql7.freemysqlhosting.net/sql7269120", "sql7269120",
+										"8nqCj6nrUS");
+								if (con != null) {
+									System.out.println("Yhteys muodostettu!");
+									
+								}
+								// päivitetään databaseen uuden kirjan tiedot
+								Statement stmt = con.createStatement();
+								stmt.executeUpdate("INSERT INTO `Kirja`(`Nimi`, `Tekija`, `Julkaisuvuosi`) VALUES ('"
+										+ nimi + "', '" + tekija + "', " + julkaisuvuosi + ")");
+								con.close();
+								System.out.println("Kirja Lisätty!");
+
+							} catch (SQLException e1) {
+
+								e1.printStackTrace();
+							}
+						}
+
+					}
+				});
+				panel_3.add(btnLisKirja);
+
+				ikkuna.setVisible(true);
+			}
+		});
+		// Luodaan button jolla voi hakea kirjat databasesta
+		JButton btnHaeJaPaivita = new JButton("Hae Kirjat");
+		btnHaeJaPaivita.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				// koska button toimii myös päivittämispainikkeena, tyhjennetään ensiksi model
+				// ja data
+
+				model.setRowCount(0);
+				data.clear();
+				try {
+
+					// luodaan yhteys databaseen
+
+					Connection con = DriverManager.getConnection("jdbc:mysql://sql7.freemysqlhosting.net/sql7269120",
+							"sql7269120", "8nqCj6nrUS");
+					if (con != null) {
+						System.out.println("Yhteys muodostettu!");
+						System.out.println("Kirja lista päivitetty!");
+					}
+					Statement stmt = con.createStatement();
+
+					ResultSet rs = stmt.executeQuery("SELECT * FROM Kirja");
+					// kerätään tieto muistiin ja lisätään se näkyviin
+					while (rs.next()) {
+						data.add(new Object[] { rs.getString(1), rs.getString(2), rs.getString(3) });
+					}
+					for (int i = 0; i < data.size(); i++) {
+						model.addRow(data.get(i));
+					}
+					// kun hakee ensimmäisen kerran databasesta tietoa muuttuu painikkeen nimi
+					// tämän jälkeen paremmin sopivaksi.
+					// tästä eteenpäin kun lisää/poistaa kirjoja, voi tämän painikkeen avulla
+					// päivittää näkymää.
+					btnHaeJaPaivita.setText("Päivitä kirja lista");
+					// suljetaan yhteys databaseen kun tarvittat toiminnot on tehty
+					con.close();
+				} catch (SQLException e1) {
+
+					e1.printStackTrace();
+				}
+			}
+		});
+
+		JButton btnPoista = new JButton("Poista Kirja");
+		btnPoista.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				JFrame ikkuna = new JFrame();
+				ikkuna.setSize(300, 150);
+				ikkuna.setTitle("Poista Kirja");
+				ikkuna.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+				ikkuna.getContentPane().setLayout(new GridLayout(0, 1, 0, 0));
+
+				JPanel panel = new JPanel();
+				ikkuna.getContentPane().add(panel);
+
+				JLabel kirjaNimi = new JLabel("Poistettavan kirjan nimi:");
+				panel.add(kirjaNimi);
+
+				kirjanNimi = new JTextField();
+				panel.add(kirjanNimi);
+				kirjanNimi.setColumns(10);
+
+				JPanel panel_1 = new JPanel();
+				ikkuna.getContentPane().add(panel_1);
+
+				JLabel julkaisuvuosi = new JLabel("Kirjan julkaisuvuosi:");
+				panel_1.add(julkaisuvuosi);
+
+				julkaisuVuosi = new JTextField();
+				panel_1.add(julkaisuVuosi);
+				julkaisuVuosi.setColumns(10);
+
+				JPanel panel_2 = new JPanel();
+				ikkuna.getContentPane().add(panel_2);
+
+				JButton btnPoistaKirja = new JButton("Poista Kirja");
+				btnPoistaKirja.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent e) {
+						if (kirjanNimi.getText().equals(null) || kirjanNimi.getText().equals("")
+								|| kirjanNimi.getText().equals(" ")) {
+							JFrame tarkistus = new JFrame();
+							tarkistus.setSize(200, 100);
+							tarkistus.setTitle("Varoitus");
+							ikkuna.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+							JLabel varoitus = new JLabel("Lisää kirjan nimi!");
+							tarkistus.getContentPane().add(varoitus);
+							tarkistus.setVisible(true);
+						}
+
+						else if (julkaisuVuosi.getText().equals(null) || julkaisuVuosi.getText().equals("")
+								|| julkaisuVuosi.getText().equals(" ")) {
+							JFrame tarkistus = new JFrame();
+							tarkistus.setSize(200, 100);
+							tarkistus.setTitle("Varoitus");
+							ikkuna.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+							JLabel varoitus = new JLabel("Lisää julkaisuvuosi!");
+							tarkistus.getContentPane().add(varoitus);
+							tarkistus.setVisible(true);
+
+						}
+
+						else {
+							// kerätään annetut infot talteen
+							String nimi = kirjanNimi.getText();
+							String vuosi = julkaisuVuosi.getText();
+
+							// luodaan yhteys
+							try {
+								Connection con = DriverManager.getConnection(
+										"jdbc:mysql://sql7.freemysqlhosting.net/sql7269120", "sql7269120",
+										"8nqCj6nrUS");
+								if (con != null) {
+									System.out.println("Yhteys muodostettu!");
+								}
+								// poistetaan databasesta haluttu kirja
+								PreparedStatement poisto = con.prepareStatement("DELETE FROM Kirja WHERE Nimi = '"
+										+ nimi + "' AND Julkaisuvuosi = '" + vuosi + "';");
+								poisto.executeUpdate();
+								con.close();
+
+							} catch (Exception e1) {
+
+								System.out.println(e1);
+							}
+
+						}
+
+					}
+				});
+				panel_2.add(btnPoistaKirja);
+
+				ikkuna.setVisible(true);
+
+			}
+
+		});
+		menuBar.add(btnHaeJaPaivita);
+		menuBar.add(btnLisaa);
+		menuBar.add(btnPoista);
+
+		ikkuna.pack();
+		ikkuna.setVisible(true);
+
+	}
+}
